@@ -44,7 +44,7 @@ const requestListener = async (req, res) => {
      * @param {Number} id
      * @return {Promise<string>} single post
      */
-    const getSinglePost = (id) => Post.find({ _id: id });
+    const getSinglePost = (id) => Post.findById({ _id: id });
 
     /**
      *  取得所有 Posts
@@ -63,9 +63,11 @@ const requestListener = async (req, res) => {
         try {
             const id = reqUrl.split('/').pop();
             const post = await getSinglePost(id);
+     
+            if(!post) throw '資料取得失敗，請確認 id 是否正確。'
             successHandles(res, post);
         } catch (error) {
-            errorHandles(res, 400, '資料取得失敗');
+            errorHandles(res, 400, error);
         }
         /**
          *  新增單筆 Post
@@ -98,11 +100,12 @@ const requestListener = async (req, res) => {
          */
     } else if (reqUrl == '/posts' && httpMethod == 'DELETE') {
         try {
-            await Post.deleteMany({});
+            const isSuccessDelete = await Post.deleteMany({});
+            if(!isSuccessDelete) throw '刪除失敗'
             const posts = await getAllPost();
-            successHandles(res, posts);
+            successHandles(res, posts,'刪除成功');
         } catch (error) {
-            errorHandles(res, 400, '刪除失敗');
+            errorHandles(res, 400, error);
         }
         /**
          *  刪除單筆 Post
@@ -110,11 +113,12 @@ const requestListener = async (req, res) => {
     } else if (reqUrl.startsWith('/posts/') && httpMethod == 'DELETE') {
         try {
             const id = reqUrl.split('/').pop();
-            await Post.findByIdAndDelete(id);
+            const isSuccessDelete = await Post.findByIdAndDelete(id);
+            if(!isSuccessDelete) throw '刪除失敗，請確認 id 是否正確。'
             const posts = await getAllPost();
             successHandles(res, posts);
         } catch (error) {
-            errorHandles(res, 400, '刪除失敗，請確認 id 是否正確。');
+            errorHandles(res, 400, error);
         }
         /**
          *  更新單筆 Post
@@ -123,8 +127,7 @@ const requestListener = async (req, res) => {
         try {
             const id = reqUrl.split('/').pop();
             const data = JSON.parse(body);
-
-            const updatePostData = await Post.findByIdAndUpdate(
+            const updateData = await Post.findByIdAndUpdate(
                 id,
                 {
                     name: data.name,
@@ -136,10 +139,9 @@ const requestListener = async (req, res) => {
                 }
             );
 
-            if(!updatePostData) throw '更新失敗，欄位錯誤或是 id 不存在。'
-            successHandles(res, updatePostData, '更新成功');
+            successHandles(res, updateData, '更新成功');
         } catch (error) {
-            errorHandles(res, 404, error);
+            errorHandles(res, 404, '更新失敗，欄位錯誤或是 id 不存在。');
         }
         /**
          *  Http Method = Options
