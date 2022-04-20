@@ -115,7 +115,7 @@ const requestListener = async (req, res) => {
             const isSuccessDelete = await Post.findByIdAndDelete(id);
             if(!isSuccessDelete) throw '刪除失敗，請確認 id 是否正確。'
             const posts = await getAllPost();
-            successHandles(res, posts);
+            successHandles(res, posts,'刪除成功');
         } catch (error) {
             errorHandles(res, 400, error);
         }
