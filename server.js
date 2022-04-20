@@ -42,7 +42,9 @@ const requestListener = async (req, res) => {
      */
     const getSinglePost = (id) => Post.find({ _id: id });
 
-    /* GET */
+    /**
+     *  取得所有 Posts
+     */
     if (reqUrl == '/posts' && httpMethod == 'GET') {
         try {
             const posts = await getAllPost();
@@ -50,7 +52,20 @@ const requestListener = async (req, res) => {
         } catch (error) {
             errorHandles(res, 400, '資料取得失敗');
         }
-        /* POST */
+        /**
+         *  取得單筆 Post
+         */
+    } else if (reqUrl.startsWith('/posts/') && httpMethod == 'GET') {
+        try {
+            const id = reqUrl.split('/').pop();
+            const post = await getSinglePost(id);
+            successHandles(res, post);
+        } catch (error) {
+            errorHandles(res, 400, '資料取得失敗');
+        }
+        /**
+         *  新增單筆 Post
+         */
     } else if (reqUrl == '/posts' && httpMethod == 'POST') {
         try {
             const data = JSON.parse(body);
@@ -74,7 +89,9 @@ const requestListener = async (req, res) => {
             }
             errorHandles(res, 400, errorMsg);
         }
-        /*DELETE - ALL */
+        /**
+         *  刪除所有 Post
+         */
     } else if (reqUrl == '/posts' && httpMethod == 'DELETE') {
         try {
             await Post.deleteMany({});
@@ -83,7 +100,9 @@ const requestListener = async (req, res) => {
         } catch (error) {
             errorHandles(res, 400, '刪除失敗');
         }
-        /* DELETE - SINGLE */
+        /**
+         *  刪除單筆 Post
+         */
     } else if (reqUrl.startsWith('/posts/') && httpMethod == 'DELETE') {
         try {
             const id = reqUrl.split('/').pop();
@@ -93,23 +112,34 @@ const requestListener = async (req, res) => {
         } catch (error) {
             errorHandles(res, 400, '刪除失敗，請確認 id 是否正確。');
         }
-        /* PATCH*/
+        /**
+         *  更新單筆 Post
+         */
     } else if (reqUrl.startsWith('/posts/') && httpMethod == 'PATCH') {
         try {
             const id = reqUrl.split('/').pop();
             const data = JSON.parse(body);
 
-            await Post.findByIdAndUpdate(id, {
-                name: data.name,
-                content: data.content,
-                image: data.image,
-            });
-            const updatePostData = await getSinglePost(id);
+            const updatePostData = await Post.findByIdAndUpdate(
+                id,
+                {
+                    name: data.name,
+                    content: data.content,
+                    image: data.image,
+                },
+                {
+                    new: true,
+                }
+            );
+
+            if(!updatePostData) throw '更新失敗，欄位錯誤或是 id 不存在。'
             successHandles(res, updatePostData, '更新成功');
         } catch (error) {
-            errorHandles(res, 404, '更新失敗，欄位錯誤或是 id 不存在。');
+            errorHandles(res, 404, error);
         }
-        /* OPTIONS*/
+        /**
+         *  Http Method = Options
+         */
     } else if (httpMethod == 'OPTIONS') {
         successHandles(res);
     } else {
@@ -119,3 +149,5 @@ const requestListener = async (req, res) => {
 
 const server = http.createServer(requestListener);
 server.listen(process.env.PORT || 3005);
+
+module.exports = server;
