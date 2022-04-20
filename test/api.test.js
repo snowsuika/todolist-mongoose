@@ -86,18 +86,18 @@ describe('Post CURD API Testing', () => {
                 .get('/posts/' + id)
                 .end((err, response) => {
                     assert.notExists(err);
-                    const resData = response.body.data[0];
+                  
 
                     expect(err).to.not.exist;
                     expect(response.statusCode).to.equal(200);
-                    expect(resData).to.be.an('object');
+                    expect(response.body.data).to.be.an('object');
 
-                    assert.hasAllKeys(resData, ['_id', 'name', 'content', 'image', 'likes', 'createdAt']);
+                    assert.hasAllKeys(response.body.data, ['_id', 'name', 'content', 'image', 'likes', 'createdAt']);
                     done();
                 });
         });
 
-        it('取得單筆貼文，id 不存在，預期回應 status = 400，訊息「資料取得失敗」', (done) => {
+        it('取得單筆貼文，id 不存在，預期回應 status = 400', (done) => {
             const id = 123;
             chai.request(server)
                 .get('/posts/' + id)
@@ -105,7 +105,6 @@ describe('Post CURD API Testing', () => {
                     expect(err).to.not.exist;
                     expect(response.status).to.equal(400);
                     expect(response.body.status).to.equal('error');
-                    expect(response.body.message).to.equal('資料取得失敗');
 
                     done();
                 });
@@ -251,14 +250,13 @@ describe('Post CURD API Testing', () => {
                 });
         });
 
-        it('刪除單筆貼文，貼文 id 不存在。預期回應 Status = 400、「刪除失敗，請確認 id 是否正確。」', (done) => {
+        it('刪除單筆貼文，貼文 id 不存在。預期回應 Status = 400', (done) => {
             const id = 123;
             chai.request(server)
                 .delete('/posts/' + id)
                 .end((err, response) => {
                     expect(err).to.not.exist;
                     expect(response.status).to.equal(400);
-                    expect(response.body.message).to.equal('刪除失敗，請確認 id 是否正確。');
 
                     done();
                 });
