@@ -3,10 +3,14 @@ const url = require('url');
 const mongoose = require('mongoose');
 const { successHandles, errorHandles } = require('./common/responseHandle');
 const { Post } = require('./models/post');
+const dotenv = require('dotenv');
+dotenv.config({path:'./config.env'})
+
+const DB = process.env.DATABASE.replace('<password>',process.env.DATABASE_PASSWORD)
 
 //連接資料庫
 mongoose
-    .connect('mongodb://localhost:27017')
+    .connect(DB)
     .then(() => {
         console.log('連線成功');
     })

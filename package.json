@@ -7,10 +7,14 @@
     "test": "mocha --exit",
     "start": "node server.js"
   },
+  "engines": {
+    "node":"v14.x"
+  },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "chai-http": "^4.3.0",
+    "dotenv": "^16.0.0",
     "eslint": "^8.13.0",
     "mongoose": "^6.3.0",
     "supertest": "^6.2.2"
