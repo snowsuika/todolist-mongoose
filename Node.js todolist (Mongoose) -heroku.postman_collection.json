@@ -1,0 +1,205 @@
+{
+	"info": {
+		"_postman_id": "9fff9aed-60ed-47b3-b6ec-cdaf5aae24f7",
+		"name": "Node.js todolist (Mongoose) -heroku",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "[GET] 取得 posts",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://afternoon-hamlet-06070.herokuapp.com/posts?keyword=&sort",
+					"protocol": "https",
+					"host": [
+						"afternoon-hamlet-06070",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"posts"
+					],
+					"query": [
+						{
+							"key": "keyword",
+							"value": ""
+						},
+						{
+							"key": "sort",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[GET] 取得單筆 post",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://afternoon-hamlet-06070.herokuapp.com/posts/626278cb168462873623365b",
+					"protocol": "https",
+					"host": [
+						"afternoon-hamlet-06070",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"posts",
+						"626278cb168462873623365b"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[POST] 新增 todos",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\":\"snow\",\n    \"content\":\"這是內容3\",\n    \"image\":\"https://upload.cc/i1/2022/04/17/B56h0r.png\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://afternoon-hamlet-06070.herokuapp.com/posts",
+					"protocol": "https",
+					"host": [
+						"afternoon-hamlet-06070",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"posts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[PATCH] 編輯 todo",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\":\"update\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://afternoon-hamlet-06070.herokuapp.com/posts/626278cb168462873623365b",
+					"protocol": "https",
+					"host": [
+						"afternoon-hamlet-06070",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"posts",
+						"626278cb168462873623365b"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[OPTIONS]  options",
+			"request": {
+				"method": "OPTIONS",
+				"header": [],
+				"url": {
+					"raw": "https://afternoon-hamlet-06070.herokuapp.com/posts",
+					"protocol": "https",
+					"host": [
+						"afternoon-hamlet-06070",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"posts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[DELETE] 刪除單筆 todo",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "https://afternoon-hamlet-06070.herokuapp.com/posts/62627bd1d4499576c171ffc7",
+					"protocol": "https",
+					"host": [
+						"afternoon-hamlet-06070",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"posts",
+						"62627bd1d4499576c171ffc7"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[DELETE]  刪除 todos",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "https://afternoon-hamlet-06070.herokuapp.com/posts",
+					"protocol": "https",
+					"host": [
+						"afternoon-hamlet-06070",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"posts"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"pm.test(\"Status code is 200\", function () {",
+					"    pm.response.to.have.status(200);",
+					"});",
+					"// pm.test(\"Status code is 400\", function () {",
+					"//     pm.response.to.have.status(400);",
+					"// });"
+				]
+			}
+		}
+	]
+}
