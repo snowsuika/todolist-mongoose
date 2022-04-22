@@ -63,7 +63,7 @@ const requestListener = async (req, res) => {
         try {
             const id = reqUrl.split('/').pop();
             const post = await getSinglePost(id);
-     
+            if(!post) throw '資料取得失敗，請確認 id 是否正確。'
             successHandles(res, post);
         } catch (error) {
             errorHandles(res, 400, '資料取得失敗，請確認 id 是否正確。');
@@ -137,7 +137,7 @@ const requestListener = async (req, res) => {
                     new: true,
                 }
             );
-
+            if(!updateData) throw '更新失敗，欄位錯誤或是 id 不存在。'
             successHandles(res, updateData, '更新成功');
         } catch (error) {
             errorHandles(res, 404, '更新失敗，欄位錯誤或是 id 不存在。');
